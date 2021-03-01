@@ -41,6 +41,7 @@ public class PieChart {
         LegendTitle legend = new LegendTitle(plot, new GridArrangement(9, 1),
                 new GridArrangement(1, 1));
         legend.setPosition(RectangleEdge.BOTTOM);
+
         chart.addLegend(legend);
 
 

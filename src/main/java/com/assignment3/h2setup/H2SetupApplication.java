@@ -1,7 +1,6 @@
 package com.assignment3.h2setup;
 
-import com.assignment3.h2setup.model.PieData;
-import com.assignment3.h2setup.model.RingData;
+import com.assignment3.h2setup.output.OutputDatabase;
 import com.assignment3.h2setup.output.OutputPDF;
 import com.assignment3.h2setup.repository.PieDataRepository;
 import com.assignment3.h2setup.repository.RingDataRepository;
@@ -41,12 +40,6 @@ public class H2SetupApplication {
         OutputPDF.renderPDF(PATH + OUTPUT_FOLDER_EXTENSION,
                 "ring_chart.png", "ring_chart.pdf");
 
-
-        //test ob Daten korrekt eingelesen
-        System.out.println("erste Zeile = " + dataForPieChart.get(0)[1]);
-        System.out.println("Tabellenausgabe");
-        dataForPieChart.forEach((data) -> System.out.println(data[1]));
-
         //spring for database
         ConfigurableApplicationContext configurableApplicationContext =
                 SpringApplication.run(H2SetupApplication.class, args);
@@ -56,14 +49,10 @@ public class H2SetupApplication {
         RingDataRepository ringDataRepository = configurableApplicationContext.getBean(RingDataRepository.class);
 
         //creates objects from pie chart data and puts it in database
-        dataForPieChart.forEach((row) -> {
-            pieDataRepository.save(new PieData(row[0], Double.parseDouble(row[1])));
-        });
+        OutputDatabase.savePieChartDataInDatabase(dataForPieChart, pieDataRepository);
 
         //creates objects from ring chart data and puts it in database
-        dataForRingChart.forEach((row) -> {
-            ringDataRepository.save(new RingData(row[0], row[1], Double.parseDouble(row[2])));
-        });
+        OutputDatabase.saveRingChartDataInDatabase(dataForRingChart, ringDataRepository);
 
 
     }
